@@ -67,6 +67,9 @@ La primera tarea que tendremos que hacer es crearnos un repositorio en nuestra m
 * Si te fijas al crear un repositorio se ha creado un fichero .git, investiga que son las estructuras y directorios que ha creado y qué tiene que ver con lo que acabamos de ver.
 
 
+Algo que tenemos que tener en mente y que suele traer dudas es que cuando yo tengo un fichero, aunque esté en el repositorio remoto, tengo que hacer el git add NOMBRE_FICHERO, porque lo que estamos haciendo es introducir al stagging area, es decir, en el preparando para el siguiente commit, el fichero en cuestión. Por lo tango el pasar el fichero a la stagging es obligatoria, a no ser que usemos el shortcut en el que lo metamos en staging y de ahí al commit directamente.
+
+
 
 
 # 02.2 Comandos útiles

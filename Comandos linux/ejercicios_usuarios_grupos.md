@@ -33,4 +33,3 @@ Objetivo: Crear un nuevo grupo en el sistema.
 
 3. Verifica que el grupo se haya creado correctamente ejecutando el comando `getent group nuevo_grupo`.
 
-Estos ejercicios permitirán a los alumnos practicar la creación de usuarios y grupos en un sistema Unix/Linux. Esto es fundamental para la administración de usuarios y permisos en el sistema.

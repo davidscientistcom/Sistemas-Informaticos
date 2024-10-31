@@ -44,8 +44,9 @@ Ubuntu Server usa **Netplan** para la configuración de red, que facilita la con
    Antes de pasar al caso siguiente, deberíamos de hacer una copia de dicho fichero.
 
 2. Modifica el archivo para asignar una **IP estática**. Reemplaza `enp0s3` por el nombre de la interfaz que identificaste antes. Por ejemplo:
+3. 
 
-   ```yaml
+```yaml
   network:
     version: 2
     ethernets:
@@ -58,6 +59,9 @@ Ubuntu Server usa **Netplan** para la configuración de red, que facilita la con
             nameservers:
                 addresses: [8.8.8.8, 8.8.4.4]
    ```
+
+
+![Imagen de adaptadores de red.](./images/ip_estatica.png "Adaptador")
 
 3. Guarda el archivo y cierra el editor.
 

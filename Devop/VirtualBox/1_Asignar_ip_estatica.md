@@ -44,7 +44,7 @@ Ubuntu Server usa **Netplan** para la configuración de red, que facilita la con
    Antes de pasar al caso siguiente, deberíamos de hacer una copia de dicho fichero.
 
 2. Modifica el archivo para asignar una **IP estática**. Reemplaza `enp0s3` por el nombre de la interfaz que identificaste antes. Por ejemplo:
-3. 
+3. Poned el nombre de fichero que queráis y eliminar el resto de ficheros.
 
 ```yaml
   network:

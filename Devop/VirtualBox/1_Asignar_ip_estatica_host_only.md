@@ -56,7 +56,7 @@ Una vez configurados los adaptadores en VirtualBox, debes proceder a configurar 
          addresses: 
          - 192.168.56.10/24
          nameservers:
-           addresses: 8.8.8.8, 8.8.4.4
+           addresses: [8.8.8.8, 8.8.4.4]
    ```
 
 4. Aplica los cambios:

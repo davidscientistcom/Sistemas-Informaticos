@@ -1,4 +1,4 @@
-Vamos a plantear un caso de ejemplo inspirado en una empresa real para ilustrar la configuración de directorios y permisos en un entorno empresarial, donde se crea una estructura de directorios, se gestionan usuarios y se asignan permisos diferenciados. Supongamos que trabajamos en una empresa llamada **Tech Solutions** y queremos implementar un sistema de archivos para su departamento de desarrollo.
+ Supongamos que trabajamos en una empresa llamada **Tech Solutions** y queremos implementar un sistema de archivos para su departamento de desarrollo.
 
 ### 1. Estructura de Directorios
 

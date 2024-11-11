@@ -122,8 +122,6 @@ Ejecuta estos comandos para crear archivos y directorios que necesitaremos en lo
 
 ### Ejercicio Práctico para Estudiantes
 
-Para reforzar estos conceptos, los estudiantes pueden realizar el siguiente ejercicio práctico:
-
 1. **Crear un Nuevo Directorio y Archivos para el Ejercicio:**
    ```bash
    mkdir ~/ejercicio_final

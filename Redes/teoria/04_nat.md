@@ -1,12 +1,9 @@
-Vamos a desarrollar el punto 1, **NAT (Network Address Translation)**, en profundidad. NAT es una tecnología esencial en redes modernas, especialmente en redes privadas que necesitan comunicarse con redes públicas, como Internet. A continuación, se explican los conceptos fundamentales de NAT, los diferentes tipos de NAT, y se incluyen ejemplos prácticos de configuración en redes.
-
----
-
 ## 1. NAT (Network Address Translation): Traducción de Direcciones IP
 
 ### 1.1 Concepto y Funcionamiento de NAT
 
-**NAT** es una técnica que permite que varios dispositivos en una red privada utilicen una única dirección IP pública para acceder a redes externas, como Internet. Esto es particularmente útil en redes con direcciones IP privadas, que no son enrutable en Internet y necesitan ser traducidas a una dirección pública para comunicarse con dispositivos externos.
+**NAT** es una técnica que permite que varios dispositivos en una red privada utilicen una única dirección IP pública para acceder a redes externas, como Internet. Esto es particularmente útil en redes con
+ direcciones IP privadas, que no son enrutable en Internet y necesitan ser traducidas a una dirección pública para comunicarse con dispositivos externos.
 
 #### Propósito de NAT
 - **Ahorro de Direcciones IP Públicas**: Permite que múltiples dispositivos usen una sola dirección IP pública, lo cual es especialmente útil dada la escasez de direcciones IPv4.

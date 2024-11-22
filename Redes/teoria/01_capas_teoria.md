@@ -6,13 +6,13 @@ El modelo TCP/IP, conocido también como el **modelo de protocolo de Internet**,
 
 El modelo TCP/IP fue desarrollado en los años 70 y 80 por el Departamento de Defensa de los Estados Unidos como parte del proyecto de red ARPANET. Este modelo surgió de la necesidad de conectar diferentes redes y facilitar la comunicación entre dispositivos sin importar el hardware o el sistema operativo. Su diseño modular permite que cada capa funcione de manera independiente pero coordinada, ofreciendo una arquitectura flexible y escalable que es capaz de adaptarse a la evolución de las tecnologías de red.
 
----
+
 
 ## Las Capas del Modelo TCP/IP
 
 Cada capa en el modelo TCP/IP tiene una función específica en el proceso de transmisión de datos y se apoya en los protocolos definidos para realizar sus tareas. A continuación, se explican cada una de las capas con detalle.
 
----
+
 
 ### 1. Capa de Enlace (Link Layer)
 
@@ -32,7 +32,7 @@ La **Capa de Enlace** es la encargada de definir cómo se envían y reciben los 
 
 En una red local (por ejemplo, en una red doméstica), si un dispositivo quiere enviar un mensaje a otro, como cuando una computadora accede a una impresora en la misma red, la Capa de Enlace traduce la IP de la impresora a su dirección MAC mediante ARP, luego encapsula los datos en tramas y utiliza el protocolo Ethernet o Wi-Fi para enviar las tramas en la red local.
 
----
+
 
 ### 2. Capa de Internet (Internet Layer)
 
@@ -61,7 +61,7 @@ El **encabezado IP** contiene información importante para el enrutamiento y ges
 
 Si una computadora en una red local envía un paquete de datos a una página web, la Capa de Internet encapsula los datos con la dirección IP de destino. El paquete se envía al router, que se encarga de reenviarlo al siguiente router hasta llegar al destino, siguiendo la ruta más eficiente.
 
----
+
 
 ### 3. Capa de Transporte (Transport Layer)
 
@@ -86,7 +86,7 @@ Los números de puerto permiten que varias aplicaciones en un mismo dispositivo 
 
 En una videollamada, UDP se utiliza para enviar paquetes de audio y video de forma continua. No importa si se pierde algún paquete, ya que el objetivo es mantener una transmisión rápida y fluida. En cambio, si el usuario descarga un archivo, TCP garantiza que el archivo llegue completo y en orden.
 
----
+
 
 ### 4. Capa de Aplicación (Application Layer)
 

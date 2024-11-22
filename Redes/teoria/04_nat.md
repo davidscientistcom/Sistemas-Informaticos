@@ -147,12 +147,3 @@ En este ejemplo:
 
 ` permite que toda la red `192.168.30.0/24` utilice NAT.
 - El comando `overload` en `ip nat inside source list 1 interface Serial0/0 overload` habilita PAT, permitiendo que múltiples dispositivos compartan la misma IP pública.
-
----
-
-### Resumen del Concepto y Ejemplos de NAT
-
-**Tipos de NAT y Aplicaciones**:
-- **NAT Estático**: Para dispositivos internos que necesitan una IP pública fija (ej. servidores).
-- **NAT Dinámico**: Para redes privadas grandes con un rango de IPs públicas compartidas.
-- **PAT**: Para redes pequeñas (como redes domésticas) donde múltiples dispositivos comparten una única IP pública.

@@ -1,138 +1,56 @@
-### 1. Introducción a Ansible
+### 1. **Introducción a Ansible**
 
-Ansible es una herramienta de automatización de código abierto que permite gestionar y configurar sistemas de manera sencilla, escalable y eficiente. Su diseño sin agentes y su uso de SSH para comunicarse con los nodos lo convierten en una opción ideal para entornos de administración de sistemas, desarrollo y enseñanza.
+#### 1.1. ¿Qué es Ansible?
 
-#### 1.1 ¿Qué es Ansible?
+**Ansible** es una herramienta de código abierto para la automatización de la administración de sistemas. Fue diseñada para ser simple, potente y sin necesidad de instalar agentes en las máquinas que gestiona. Ansible permite:
 
-Ansible es una herramienta diseñada para automatizar tareas repetitivas y complejas relacionadas con la administración de sistemas y la implementación de aplicaciones. Esto incluye:
+- **Configurar sistemas** de manera uniforme.
+- **Desplegar aplicaciones** con un solo comando.
+- **Orquestar tareas complejas**, como actualizaciones de múltiples servidores.
 
-- Configuración de sistemas operativos y servicios.
-- Despliegue de aplicaciones.
-- Gestión de infraestructura en múltiples entornos.
+Es especialmente popular en entornos de TI por su facilidad de uso y su capacidad de integrarse con sistemas existentes mediante el uso de **SSH**.
 
-A diferencia de otras herramientas de automatización, Ansible no requiere la instalación de agentes en los sistemas gestionados, lo que simplifica su configuración y mantenimiento.
+---
 
-**Arquitectura de Ansible:**
-- **Nodo de control**: Es el sistema desde el cual se ejecutan los comandos y playbooks de Ansible. Este sistema necesita tener instalado Ansible.
-- **Nodos gestionados**: Son los sistemas que se configuran o gestionan mediante Ansible. Solo necesitan permitir acceso SSH y contar con Python instalado.
+#### 1.2. ¿Por qué usar Ansible?
 
-#### 1.2 Ventajas de Ansible
+Ansible se destaca por:
 
-1. **Sin agentes**: Ansible no requiere software adicional en los nodos gestionados, ya que utiliza SSH para comunicarse.
-2. **Simplicidad**: Los scripts de Ansible (conocidos como playbooks) están escritos en YAML, un formato de datos sencillo y legible.
-3. **Escalabilidad**: Permite gestionar cientos o miles de servidores desde un único nodo de control.
-4. **Reproducibilidad**: Las configuraciones y tareas se definen como código, lo que asegura que los cambios sean consistentes y reproducibles.
-5. **Extensibilidad**: Ansible cuenta con una gran cantidad de módulos que permiten realizar tareas como instalar paquetes, configurar servicios, gestionar bases de datos, y mucho más.
+1. **Facilidad de uso**: Usa un lenguaje declarativo basado en YAML que es intuitivo y fácil de aprender.
+2. **Sin agentes**: No requiere la instalación de software adicional en los nodos gestionados, lo que reduce la sobrecarga.
+3. **Escalabilidad**: Desde la gestión de un servidor hasta cientos o miles, Ansible escala fácilmente.
+4. **Compatibilidad multiplataforma**: Funciona con diferentes sistemas operativos (Linux, Windows, macOS).
+5. **Gran comunidad y soporte**: Su adopción masiva ha generado una rica documentación y contribuciones.
 
-#### 1.3 Instalación de Ansible
+Ejemplo práctico:
+Imagina que tienes 10 servidores y necesitas instalar Apache en todos ellos. Con Ansible, podrías hacerlo con un solo comando, en lugar de repetir el proceso manualmente en cada máquina.
 
-Para empezar a trabajar con Ansible, primero debemos instalarlo en el nodo de control. Este nodo será el sistema desde el cual se gestionarán los nodos remotos.
+---
 
-##### Instalación en Ubuntu
+#### 1.3. Conceptos clave
 
-1. **Actualizar el sistema**:
+1. **Infraestructura como Código (IaC)**:
+   - Ansible permite definir la configuración de tu infraestructura como código. Esto facilita la reproducibilidad, el control de versiones y el despliegue en diferentes entornos.
 
-   ```bash
-   sudo apt update && sudo apt upgrade -y
-   ```
+2. **Configuración centralizada**:
+   - Desde una máquina principal (el **nodo controlador**), puedes gestionar múltiples servidores (los **nodos gestionados**).
 
-2. **Añadir el repositorio de Ansible**:
+3. **Automatización sin agentes**:
+   - A diferencia de otras herramientas, Ansible no necesita que instales software en los nodos gestionados. Solo necesita acceso por **SSH** y Python.
 
-   ```bash
-   sudo apt install software-properties-common -y
-   sudo add-apt-repository --yes --update ppa:ansible/ansible
-   ```
+---
 
-3. **Instalar Ansible**:
+#### 1.4. Casos de uso en la industria
 
-   ```bash
-   sudo apt install ansible -y
-   ```
+1. **Gestión de configuraciones**:
+   - Definir y mantener la configuración de servidores. Ejemplo: establecer la misma versión de Apache en todos los nodos.
 
-4. **Verificar la instalación**:
+2. **Despliegue de aplicaciones**:
+   - Automatizar el despliegue de aplicaciones web. Ejemplo: desplegar una aplicación Django con una base de datos PostgreSQL.
 
-   ```bash
-   ansible --version
-   ```
+3. **Orquestación**:
+   - Coordinar tareas complejas que involucran múltiples servidores. Ejemplo: actualizar un sistema distribuido sin interrumpir el servicio.
 
-   Esto debería mostrar la versión instalada de Ansible.
+4. **Seguridad y cumplimiento**:
+   - Asegurar que los servidores cumplan con políticas de seguridad. Ejemplo: configurar reglas de firewall de manera uniforme.
 
-##### Instalación en Otras Distribuciones
-
-- **CentOS/Red Hat**:
-
-  ```bash
-  sudo yum install epel-release -y
-  sudo yum install ansible -y
-  ```
-
-- **macOS** (usando Homebrew):
-
-  ```bash
-  brew install ansible
-  ```
-
-- **Windows**: Ansible no se instala directamente en Windows, pero puedes usar el Subsistema de Windows para Linux (WSL) o una máquina virtual como nodo de control.
-
-#### 1.4 Comprobación de Conexión SSH
-
-Para que Ansible pueda gestionar los nodos, es necesario configurar el acceso SSH entre el nodo de control y los nodos gestionados. Sigue estos pasos:
-
-1. **Generar una clave SSH en el nodo de control** (si no existe):
-
-   ```bash
-   ssh-keygen -t rsa -b 4096
-   ```
-
-   Acepta las opciones predeterminadas y recuerda la ubicación de la clave generada (normalmente en `~/.ssh/id_rsa`).
-
-2. **Copiar la clave pública al nodo gestionado**:
-
-   ```bash
-   ssh-copy-id usuario@nodo_gestionado
-   ```
-
-   Esto asegura que el nodo de control pueda acceder al nodo gestionado sin requerir contraseña.
-
-3. **Probar la conexión SSH**:
-
-   ```bash
-   ssh usuario@nodo_gestionado
-   ```
-
-   Si la conexión es exitosa, Ansible podrá gestionar el nodo.
-
-#### 1.5 Verificación de los Nodos Gestionados
-
-Una vez configurado el acceso SSH, podemos probar la comunicación entre el nodo de control y los nodos gestionados utilizando el comando `ansible` con el módulo `ping`:
-
-1. Crear un archivo de inventario llamado `hosts` con el siguiente contenido:
-
-   ```plaintext
-   [servidores]
-   nodo1 ansible_host=192.168.33.10
-   nodo2 ansible_host=192.168.33.11
-   ```
-
-   En este archivo:
-   - `servidores` es un grupo que agrupa a los nodos gestionados.
-   - `ansible_host` especifica la dirección IP o nombre de host de cada nodo.
-
-2. Ejecutar el comando de prueba:
-
-   ```bash
-   ansible servidores -i hosts -m ping
-   ```
-
-   Esto enviará un ping a cada nodo del grupo `servidores`. Si la configuración es correcta, deberías ver una salida similar a esta:
-
-   ```plaintext
-   nodo1 | SUCCESS => {
-       "changed": false,
-       "ping": "pong"
-   }
-   nodo2 | SUCCESS => {
-       "changed": false,
-       "ping": "pong"
-   }
-   ```

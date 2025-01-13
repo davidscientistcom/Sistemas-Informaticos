@@ -3,7 +3,7 @@
 #### Objetivo del Capítulo
 Aprenderás cómo leer datos de archivos y escribir en ellos utilizando Python. Estas habilidades te permitirán gestionar archivos de registro, analizar datos y crear archivos de configuración.
 
----
+
 
 ### 4.1 Introducción a la Lectura y Escritura de Archivos
 
@@ -11,7 +11,7 @@ Aprenderás cómo leer datos de archivos y escribir en ellos utilizando Python. 
    - En la administración de sistemas, muchas tareas involucran la manipulación de archivos de texto: crear registros, modificar configuraciones y analizar datos.
    - Python proporciona métodos sencillos para leer y escribir archivos, lo cual facilita su uso en tareas de mantenimiento y automatización.
 
----
+
 
 ### 4.2 Abrir y Cerrar Archivos
 
@@ -32,7 +32,7 @@ Aprenderás cómo leer datos de archivos y escribir en ellos utilizando Python. 
 **3. Ejercicio**
    - **Objetivo**: Crea un archivo `abrir_cerrar.py` que abra un archivo llamado `ejemplo.txt` en modo escritura, luego lo cierre, y verifica que el archivo ha sido creado en el directorio actual.
 
----
+
 
 ### 4.3 Escribir en Archivos
 
@@ -56,7 +56,7 @@ Para escribir en un archivo, utilizamos el método `write()` después de abrirlo
      ```
    - **Paso 2**: Ejecuta el script y abre `registro.txt` para verificar el contenido.
 
----
+
 
 ### 4.4 Leer Archivos
 
@@ -85,7 +85,7 @@ Para leer un archivo, lo abrimos en modo `"r"` y utilizamos métodos como `read(
    - **Paso 1**: Escribe el código anterior en el archivo `leer_archivo.py`.
    - **Paso 2**: Ejecuta el archivo y observa cómo se imprimen las líneas del archivo.
 
----
+
 
 ### 4.5 Agregar Información a un Archivo
 
@@ -108,7 +108,7 @@ Para añadir contenido sin sobrescribir el archivo existente, usa el modo `"a"` 
      ```
    - **Paso 2**: Ejecuta el script y revisa `registro.txt` para ver la nueva línea añadida.
 
----
+
 
 ### 4.6 Ejercicio Completo: Generador de Archivos de Log
 
@@ -134,7 +134,7 @@ Para añadir contenido sin sobrescribir el archivo existente, usa el modo `"a"` 
    - Usamos la función `registrar_evento()` para crear una entrada en el archivo `logs.txt` con la fecha y hora actual.
    - Cada vez que ejecutas el script, nuevos eventos se añadirán al archivo de logs.
 
----
+
 
 ### 4.7 Modo `with` para Manejar Archivos
 
@@ -157,3 +157,79 @@ Python ofrece una forma más segura de abrir archivos usando la instrucción `wi
              print(linea, end="")
      ```
    - **Paso 2**: Ejecuta el script y verifica que funcione como antes, pero sin la necesidad de cerrar el archivo manualmente.
+
+### 4.8 Otros formatos.
+
+## Ficheros CSV (Comma-Separated Values)
+Un fichero CSV organiza los datos en filas y columnas separados por comas. Python ofrece el módulo `csv` para trabajar con este tipo de ficheros.
+
+### Lectura de un fichero CSV
+
+```python
+import csv
+
+# Ejemplo 5: Leer un CSV completo
+with open('datos.csv', 'r') as fichero:
+    lector = csv.reader(fichero)
+    for fila in lector:
+        print(fila)
+```
+
+El módulo `csv` convierte cada fila en una lista.
+
+```python
+# Ejemplo 6: Leer un CSV con encabezados
+with open('datos.csv', 'r') as fichero:
+    lector = csv.DictReader(fichero)
+    for fila in lector:
+        print(fila)  # Cada fila es un diccionario
+```
+
+### Escritura en un fichero CSV
+
+```python
+# Ejemplo 7: Escribir en un CSV
+with open('salida.csv', 'w', newline='') as fichero:
+    escritor = csv.writer(fichero)
+    escritor.writerow(['Nombre', 'Edad', 'Ciudad'])  # Encabezado
+    escritor.writerow(['Ana', 25, 'Madrid'])
+    escritor.writerow(['Luis', 30, 'Barcelona'])
+```
+
+```python
+# Ejemplo 8: Escribir un CSV usando diccionarios
+with open('salida.csv', 'w', newline='') as fichero:
+    campos = ['Nombre', 'Edad', 'Ciudad']
+    escritor = csv.DictWriter(fichero, fieldnames=campos)
+    escritor.writeheader()
+    escritor.writerow({'Nombre': 'Ana', 'Edad': 25, 'Ciudad': 'Madrid'})
+    escritor.writerow({'Nombre': 'Luis', 'Edad': 30, 'Ciudad': 'Barcelona'})
+```
+
+## Ficheros JSON (JavaScript Object Notation)
+Los ficheros JSON son útiles para almacenar datos estructurados de manera jerárquica. Python proporciona el módulo `json` para trabajar con este formato.
+
+### Lectura de un fichero JSON
+
+```python
+import json
+
+# Ejemplo 9: Leer un fichero JSON
+with open('datos.json', 'r') as fichero:
+    datos = json.load(fichero)  # Convierte el JSON a un diccionario o lista
+print(datos)
+```
+
+### Escritura en un fichero JSON
+
+```python
+# Ejemplo 10: Escribir en un fichero JSON
+nuevos_datos = {
+    "nombre": "Ana",
+    "edad": 25,
+    "ciudad": "Madrid"
+}
+
+with open('salida.json', 'w') as fichero:
+    json.dump(nuevos_datos, fichero, indent=4)  # Formato legible con indentación
+```

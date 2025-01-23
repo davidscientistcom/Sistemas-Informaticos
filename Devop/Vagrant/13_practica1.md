@@ -162,3 +162,83 @@ chown -R vagrant:vagrant /home/vagrant/.ssh
   ```bash
   sudo journalctl -u ssh
   ```
+
+
+### **4. Sale este error:
+
+```bash
+192.168.56.10 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @\r\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\nIT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!\r\nSomeone could be eavesdropping on you right now (man-in-the-middle attack)!\r\nIt is also possible that a host key has just been changed.\r\nThe fingerprint for the ED25519 key sent by the remote host is\nSHA256:MR+lefcqmw4HL4Kz86LBJrS9DsLMWT54qNoLp2VdPMk.\r\nPlease contact your system administrator.\r\nAdd correct host key in /home/deivit/.ssh/known_hosts to get rid of this message.\r\nOffending ECDSA key in /home/deivit/.ssh/known_hosts:3\r\n  remove with:\r\n  ssh-keygen -f '/home/deivit/.ssh/known_hosts' -R '192.168.56.10'\r\nHost key for 192.168.56.10 has changed and you have requested strict checking.\r\nHost key verification failed.",
+    "unreachable": true
+}
+```
+El problema que describes está relacionado con el cambio de clave de host SSH. Esto ocurre porque el servidor gestionado ha cambiado su clave de host, pero tu archivo `~/.ssh/known_hosts` aún tiene la clave anterior registrada.
+
+Sigue estos pasos para solucionarlo:
+
+---
+
+### Solución: Limpieza de la clave de host anterior
+
+1. **Eliminar la clave anterior del archivo `known_hosts`**:
+
+   Ejecuta el siguiente comando para eliminar la entrada del host problemático en el archivo `known_hosts`:
+
+   ```bash
+   ssh-keygen -f "/home/deivit/.ssh/known_hosts" -R "192.168.56.10"
+   ```
+
+   Esto elimina la entrada específica para `192.168.56.10`.
+
+---
+
+2. **Verificar la conectividad SSH manualmente**:
+
+   Prueba conectarte al servidor gestionado manualmente para registrar la nueva clave de host:
+
+   ```bash
+   ssh -i ~/.ssh/vagrant_vm_key vagrant@192.168.56.10
+   ```
+
+   Deberías recibir un mensaje similar a este:
+
+   ```
+   The authenticity of host '192.168.56.10' can't be established.
+   ED25519 key fingerprint is SHA256:MR+lefcqmw4HL4Kz86LBJrS9DsLMWT54qNoLp2VdPMk.
+   Are you sure you want to continue connecting (yes/no)?
+   ```
+
+   Escribe `yes` para aceptar la nueva clave y registrarla.
+
+---
+
+3. **Configurar Ansible para evitar problemas futuros (opcional)**:
+
+   Si prefieres que Ansible ignore los cambios de claves de host, agrega la configuración `host_key_checking` en tu archivo `ansible.cfg`:
+
+   ```ini
+   [defaults]
+   host_key_checking = False
+   ```
+
+   Esto deshabilita la verificación de claves de host en el futuro. **Nota:** Este ajuste tiene implicaciones de seguridad, ya que no detectará ataques de tipo "man-in-the-middle".
+
+---
+
+4. **Ejecutar el comando Ansible de nuevo**:
+
+   Ahora intenta ejecutar el comando Ansible nuevamente:
+
+   ```bash
+   ansible -i inventario all -m ping
+   ```
+
+   Si todo está configurado correctamente, deberías ver algo como esto:
+
+   ```json
+   192.168.56.10 | SUCCESS => {
+       "changed": false,
+       "ping": "pong"
+   }
+   ```

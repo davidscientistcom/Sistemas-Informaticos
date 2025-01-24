@@ -36,6 +36,15 @@ Para empezar a usar Vagrant, se necesita instalar tanto Vagrant como un proveedo
 
 > **Nota**: En sistemas basados en Linux, también puedes instalar Vagrant mediante un gestor de paquetes. Por ejemplo, en distribuciones basadas en Debian, el comando sería `sudo apt install vagrant`.
 
+El comando que te aparece en la página oficial es:
+
+```bash
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install vagrant
+
+```
+
 ##### Verificación de la Instalación
 
 Después de instalar Vagrant y VirtualBox, verifica que ambos programas están correctamente instalados ejecutando los siguientes comandos en la terminal o en el símbolo del sistema:

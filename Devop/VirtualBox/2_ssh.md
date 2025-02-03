@@ -9,7 +9,7 @@ Poder conectarnos desde windows  a una máquina virtual Ubuntu Server configurad
 - **Máquina virtual Ubuntu Server** instalada en **VirtualBox**.
 - **IP estática configurada** en la máquina virtual para que sea accesible desde el host.
 
----
+
 
 ### Paso 1: Instalación y Configuración Inicial del Servidor SSH en Ubuntu Server
 
@@ -27,107 +27,267 @@ Poder conectarnos desde windows  a una máquina virtual Ubuntu Server configurad
    sudo systemctl status ssh
    ```
    Si no está activo, puedes iniciarlo manualmente:
+
+
    ```bash
    sudo systemctl start ssh
    ```
 
----
+### Paso 2: Testear la conexión 
 
-### Paso 2: Generar el Par de Claves en Windows (en la Máquina del Estudiante)
+La forma más sencilla es sabiendo la ip, por ejemplo, si la máquina tiene una IP: 192.168.1.20 y el usuario es david:
+```bash
+   ssh david@192.168.1.20,
 
-Cada estudiante generará su propio par de claves SSH en su sistema Windows para autenticarse en la máquina Ubuntu Server.
+``` 
 
-1. **Abrir PowerShell o Git Bash** en el sistema Windows del estudiante.
-2. **Generar el par de claves SSH** usando una ruta específica para asegurar la correcta generación en Windows:
-   ```powershell
-   ssh-keygen -t rsa -b 4096 -f C:\Users\battl\.ssh\id_rsa_vagrant
-   ```
+### Paso : Fingerprint en ssh
+Voy a explicarte detalladamente qué significan esos mensajes de "fingerprint" que ves al conectarte por SSH, así como el papel que juega el archivo `authorized_keys` y por qué en ocasiones es necesario borrar o modificar entradas en él.
 
-**NOTA** Aquí deberéis de usar vuestro usuario, esto es un ejemplo del mio.
 
-   Esto generará dos archivos:
-   - `id_rsa_vagrant`: Clave privada (debe mantenerse en secreto).
-   - `id_rsa_vagrant.pub`: Clave pública (se usará en Ubuntu Server).
+### ¿Qué es el fingerprint?
 
-3. **No establecer una frase de contraseña** a menos que desees una capa adicional de seguridad. Si se deja en blanco, podrán acceder sin necesidad de ingresar una contraseña.
+Cuando te conectas por SSH a un servidor por primera vez, el cliente SSH (tu ordenador) recibe la clave pública del servidor. Para no mostrar la clave completa (que puede ser bastante larga), se calcula un **fingerprint** o huella digital. Este fingerprint es, básicamente, un resumen (hash) de la clave pública del servidor.
 
-4. **Verificar la existencia de los archivos**:
-   - Dirígete a la carpeta `C:\Users\battl\.ssh\` y verifica que `id_rsa_vagrant` e `id_rsa_vagrant.pub` estén presentes.
+### ¿Para qué sirve?
 
----
+- **Verificación de la identidad del servidor:**  
+  El fingerprint te permite confirmar que el servidor al que te estás conectando es realmente el que esperas. La primera vez que te conectas, el cliente te muestra el fingerprint y te pregunta si confías en él. Si lo aceptas, se guarda en tu archivo `known_hosts`.
 
-### Paso 3: Agregar la Clave Pública Manualmente en la Máquina Virtual Ubuntu Server
+- **Protección contra ataques Man-in-the-Middle:**  
+  Si alguien intenta interceptar o suplantar el servidor, la clave pública (y, por ende, su fingerprint) será diferente. En una conexión posterior, el cliente SSH detectará la diferencia y te avisará de un posible problema.
 
-Como aún no tienes acceso SSH, este paso se realiza directamente en la consola de Ubuntu Server.
+### Ejemplo en la práctica
 
-1. **Abrir la clave pública en el sistema Windows**:
-   - Abre `id_rsa_vagrant.pub` en PowerShell o Git Bash usando:
-     ```powershell
-     cat C:\Users\battl\.ssh\id_rsa_vagrant.pub
-     ```
-   - Copia el contenido completo de la clave pública que se muestra (comienza con `ssh-rsa`).
+Cuando te conectas a un servidor nuevo, podrías ver un mensaje como:
 
-2. **Agregar la clave pública en Ubuntu Server**:
-   - En la consola de Ubuntu Server, crea la carpeta `.ssh` y el archivo `authorized_keys` si no existen:
-     ```bash
-     mkdir -p ~/.ssh
-     nano ~/.ssh/authorized_keys
-     ```
-   - Pega la clave pública en `authorized_keys` y guarda el archivo (`Ctrl+O` para guardar y `Ctrl+X` para salir en `nano`).
+```plaintext
+The authenticity of host '192.168.1.100 (192.168.1.100)' can't be established.
+ECDSA key fingerprint is SHA256:abc123def456ghi789...
+Are you sure you want to continue connecting (yes/no)?
+```
 
-3. **Ajustar permisos en Ubuntu Server**:
-   ```bash
-   chmod 700 ~/.ssh
-   chmod 600 ~/.ssh/authorized_keys
-   ```
+- **Qué ocurre en ese momento:**  
+  El cliente SSH muestra el fingerprint calculado a partir de la clave pública del servidor. Si tú verificas (por ejemplo, comparándolo con un fingerprint proporcionado por el administrador del servidor) y confirmas que coincide, puedes responder "yes". Una vez aceptado, el fingerprint se almacena en el archivo `~/.ssh/known_hosts` de tu máquina local, y en conexiones futuras, el cliente lo compara para asegurarse de que el servidor no haya cambiado su clave.
 
----
 
-### Paso 4: Probar la Conexión SSH desde Windows Usando la Clave Privada
 
-Una vez que las claves están configuradas, los estudiantes pueden intentar conectarse a la máquina Ubuntu Server desde Windows.
+## 2. **El archivo `authorized_keys`**
 
-1. **Conectar usando PowerShell o Git Bash**:
-   ```powershell
-   ssh -i C:\Users\battl\.ssh\id_rsa_vagrant vagrant@192.168.0.45
-   ```
-   - Reemplaza `vagrant` con el usuario de Ubuntu Server y `192.168.0.45` con la IP estática de la máquina.
+### ¿Qué es y para qué sirve?
 
-2. **Configuración opcional en PuTTY**:
-   - Si el estudiante prefiere usar PuTTY, deberán convertir la clave privada al formato PuTTY (.ppk) usando **PuTTYgen**:
-     1. Abre **PuTTYgen** y carga `id_rsa_vagrant`.
-     2. Guarda la clave como `id_rsa_vagrant.ppk`.
-   - Configura PuTTY para usar la clave privada en `SSH > Auth > Private key file for authentication`.
+El archivo `authorized_keys` es un archivo que se encuentra en el directorio `~/.ssh/` del usuario en el servidor (por ejemplo, `/home/usuario/.ssh/authorized_keys`). Este archivo contiene una lista de **claves públicas** autorizadas para acceder a ese usuario mediante SSH.
 
----
+**Funcionamiento:**
 
-### Paso 5: (Opcional) Desactivar la Autenticación por Contraseña
+- **Autenticación mediante clave pública:**  
+  Cuando intentas conectarte por SSH usando autenticación por clave, el servidor compara la clave pública que envías con las que tiene registradas en `authorized_keys`. Si encuentra una coincidencia, te permite la conexión sin necesidad de pedirte una contraseña.
 
-Si quieres que el acceso sea únicamente por clave pública, puedes desactivar la autenticación por contraseña en SSH.
+- **Control de acceso:**  
+  Puedes añadir o quitar claves en este archivo para controlar qué dispositivos o usuarios pueden acceder al servidor. Cada línea del archivo representa una clave autorizada.
 
-1. **Editar el archivo de configuración SSH en Ubuntu Server**:
-   ```bash
-   sudo nano /etc/ssh/sshd_config
-   ```
-2. **Desactivar la autenticación por contraseña**:
+### Ejemplo de contenido de `authorized_keys`
+
+```plaintext
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQ... clave_maquina_virtual
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF... otra_clave_para_otro_equipo
+```
+
+En este ejemplo, cada línea es una clave pública asociada a algún dispositivo o usuario, junto con un comentario (al final) que ayuda a identificar la clave.
+
+
+
+## 3. **¿Por qué a veces es necesario borrar o modificar entradas en `authorized_keys`?**
+
+Hay varias razones por las cuales podrías necesitar limpiar o modificar este archivo:
+
+1. **Cambio o reemplazo de claves:**  
+   Si un dispositivo cambia su par de claves (por ejemplo, por cuestiones de seguridad o porque se perdió el acceso a la clave anterior), tendrás que eliminar la entrada antigua y agregar la nueva.
+
+2. **Eliminación de accesos no deseados:**  
+   Si un usuario o dispositivo ya no debería tener acceso al servidor, se debe eliminar su clave del archivo `authorized_keys`.
+
+3. **Errores o duplicados:**  
+   A veces, al copiar claves manualmente, pueden generarse entradas duplicadas o errores en el archivo que impidan la correcta autenticación. Limpiar el archivo y dejar solo las entradas válidas es una buena práctica para evitar conflictos.
+
+4. **Mantenimiento de seguridad:**  
+   Con el tiempo, la lista de claves autorizadas puede crecer. Revisarla periódicamente te ayuda a asegurarte de que solo las claves necesarias y actuales se mantengan, reduciendo la superficie de ataque.
+
+### Ejemplo práctico: Borrar una entrada
+
+Si, por ejemplo, ya no confías en la clave asociada al comentario `clave_antigua`, puedes conectarte al servidor y editar el archivo:
+
+```bash
+ssh usuario@ip_del_servidor
+nano ~/.ssh/authorized_keys
+```
+
+Luego, localizas la línea correspondiente a `clave_antigua` y la eliminas. Tras guardar los cambios, esa clave ya no permitirá el acceso.
+
+A continuación, te explico de forma detallada y paso a paso cómo copiar tu clave pública al servidor Ubuntu que tienes en VirtualBox para que puedas acceder mediante SSH sin que te solicite contraseña. Imagina que estamos escribiendo un manual de texto para que los chavales puedan seguir cada paso con claridad.
+
+# Certificados en el servidor.
+
+## 1. **Generar el par de claves (si aún no lo has hecho)**
+
+Si ya tienes generado tu par de claves (clave privada y clave pública), puedes saltarte este paso. En caso contrario, en tu máquina local (desde donde te conectas) abre una terminal y ejecuta:
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "tu_correo@ejemplo.com"
+```
+
+**Explicación:**
+
+- **`-t rsa`**: Especifica que quieres generar una clave RSA.
+- **`-b 4096`**: Indica que la longitud de la clave será de 4096 bits, lo que mejora la seguridad.
+- **`-C "tu_correo@ejemplo.com"`**: Es un comentario que ayuda a identificar la clave (por ejemplo, con tu correo).
+
+Durante el proceso se te preguntará dónde guardar la clave. La ruta por defecto es `~/.ssh/id_rsa` para la clave privada y `~/.ssh/id_rsa.pub` para la clave pública. También se te pedirá que introduzcas una frase de contraseña (passphrase) para mayor seguridad; si prefieres no utilizar una, simplemente pulsa Enter.
+
+--- 
+Si en lugar del fichero, y **es mi forma recomendada** lo que quiero es poner un nombre al certificado para que todos los certificados que yo tenga tengan un nombre claro, deberíamos de hacerlo con:
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "nombre_concreto"
+```
+
+
+
+## 2. **Copiar la clave pública al servidor Ubuntu**
+
+La idea es que el servidor tenga una copia de tu clave pública para reconocer y autorizar tus conexiones sin necesidad de introducir una contraseña cada vez.
+
+### **Opción A: Usando `ssh-copy-id`**
+
+Esta herramienta simplifica mucho el proceso. En tu máquina local, ejecuta:
+
+```bash
+ssh-copy-id usuario@ip_maquina_virtual
+```
+
+**Donde:**
+
+- **`usuario`**: Es el nombre de usuario en el servidor Ubuntu.
+- **`ip_maquina_virtual`**: Es la dirección IP (o nombre de host) de la máquina virtual.
+
+**Qué hace este comando:**
+
+- Se conecta al servidor mediante SSH.
+- Crea el directorio `~/.ssh` en el servidor (si no existe).
+- Añade tu clave pública al archivo `~/.ssh/authorized_keys` de forma segura, asegurándose de no sobrescribir entradas existentes.
+
+### **Opción B: Copiar manualmente la clave pública**
+
+Si por alguna razón no cuentas con `ssh-copy-id` o prefieres hacerlo manualmente, sigue estos pasos:
+
+1. En tu máquina local, visualiza el contenido de tu clave pública:
+
+    ```bash
+    cat ~/.ssh/id_rsa.pub
+    ```
+
+2. Copia el resultado (todo el contenido de esa línea).
+
+3. Conéctate al servidor Ubuntu (inicialmente con contraseña):
+
+    ```bash
+    ssh usuario@ip_maquina_virtual
+    ```
+
+4. Una vez conectado, asegúrate de tener el directorio `.ssh` creado y con los permisos correctos:
+
+    ```bash
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+    ```
+
+5. Edita (o crea) el archivo `authorized_keys` en el directorio `~/.ssh`:
+
+    ```bash
+    nano ~/.ssh/authorized_keys
+    ```
+
+6. Pega la clave pública que copiaste en el archivo y guarda los cambios.
+
+7. Asegúrate de que el archivo tenga los permisos correctos:
+
+    ```bash
+    chmod 600 ~/.ssh/authorized_keys
+    ```
+
+8. Sal del servidor:
+
+    ```bash
+    exit
+    ```
+
+**Nota:** Otra forma, si prefieres hacerlo todo desde la máquina local sin abrir un editor en el servidor, es ejecutar:
+
+```bash
+cat ~/.ssh/id_rsa.pub | ssh usuario@ip_maquina_virtual "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+```
+
+
+
+## 3. **Verificar los permisos y la configuración en el servidor**
+
+Es fundamental que el directorio `~/.ssh` y el archivo `authorized_keys` tengan los permisos adecuados para que el servidor SSH funcione correctamente:
+
+- **Directorio `~/.ssh`**: Permisos **700** (lectura, escritura y ejecución solo para el propietario).
+
+    ```bash
+    chmod 700 ~/.ssh
+    ```
+
+- **Archivo `authorized_keys`**: Permisos **600** (lectura y escritura solo para el propietario).
+
+    ```bash
+    chmod 600 ~/.ssh/authorized_keys
+    ```
+
+Si estos permisos son demasiado permisivos, el servidor SSH puede negarse a utilizar el archivo por motivos de seguridad.
+
+
+
+## 4. **Probar la conexión sin contraseña**
+
+Con todo configurado, prueba conectarte nuevamente desde tu máquina local:
+
+```bash
+ssh usuario@ip_maquina_virtual
+```
+
+Si todo está correcto, no se te pedirá la contraseña, y el proceso de autenticación se realizará mediante el certificado (clave pública y privada).
+
+
+
+## 5. **Solución de problemas comunes**
+
+Si por algún motivo la conexión aún te solicita contraseña, revisa lo siguiente:
+
+1. **Verifica la ubicación y el nombre de las claves:**  
+   Asegúrate de que la clave pública que copiaste es la correcta y se encuentra en `~/.ssh/id_rsa.pub` (o el nombre que hayas especificado al generarla).
+
+2. **Revisa los permisos:**  
+   Tanto en el directorio `~/.ssh` como en `authorized_keys`, los permisos deben ser estrictos (700 y 600, respectivamente).
+
+3. **Configuración del servidor SSH:**  
+   Revisa el archivo de configuración `/etc/ssh/sshd_config` en el servidor Ubuntu para asegurarte de que las siguientes líneas no estén deshabilitando la autenticación mediante clave pública:
+
    ```plaintext
-   PasswordAuthentication no
+   PubkeyAuthentication yes
+   AuthorizedKeysFile    .ssh/authorized_keys
    ```
-3. **Reiniciar el servicio SSH**:
+
+   Después de cualquier cambio en este archivo, recuerda reiniciar el servicio SSH:
+
    ```bash
    sudo systemctl restart ssh
    ```
 
----
+4. **Logs de SSH:**  
+   Si sigues teniendo problemas, revisa los logs del servidor para obtener más detalles:
 
-### Verificación Final
-
-1. **Comprobar conexión**: Cada estudiante debe asegurarse de que puede conectarse usando la clave privada sin necesidad de contraseña.
-2. **Resolver problemas de conexión**:
-   - Verificar permisos en el archivo `authorized_keys`.
-   - Asegurar que el firewall de Ubuntu permite conexiones SSH:
-     ```bash
-     sudo ufw allow ssh
-     sudo ufw status
-     ```
-ssh-keygen -R 192.168.56.10
+   ```bash
+   sudo tail -f /var/log/auth.log
+   ```

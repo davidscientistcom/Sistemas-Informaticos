@@ -1,5 +1,6 @@
 ### **1. Instalación de PostgreSQL en Xubuntu**
 
+Suponiendo un Linux, estos pasos instalan un editor lo más parecido al pgadmin. Todo ésto se ejecuta **fuera** de la máquina virtual
 ```sh
 sudo apt update
 sudo apt install wget openjdk-11-jdk -y
@@ -7,6 +8,11 @@ echo "deb https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list
 wget -O - https://dbeaver.io/debs/dbeaver.gpg.key | sudo apt-key add -
 sudo apt update
 sudo apt install dbeaver-ce -y
+```
+
+Esto se debe de ejecutar **dentro** de la máquina virtual
+
+```sh
 sudo apt install postgresql postgresql-contrib -y
 sudo systemctl start postgresql
 sudo systemctl enable postgresql

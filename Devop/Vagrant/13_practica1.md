@@ -44,7 +44,7 @@ El siguiente script configura una máquina virtual con Vagrant y asegura que la 
 ```ruby
 Vagrant.configure("2") do |config|
   # Especifica la caja base de Ubuntu
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "ubuntu/xenial64"
 
   # Configura una red privada con una IP fija
   config.vm.network "private_network", ip: "192.168.33.10"
@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Copia la clave pública generada en el host a la VM
-  config.vm.provision "file", source: "#{Dir.home}/.ssh/vagrant_vm_key.pub", destination: "/home/vagrant/.ssh/vagrant_vm_key.pub"
+  config.vm.provision "file", run: "once", source: "#{Dir.home}/.ssh/vagrant_vm_key.pub", destination: "/home/vagrant/.ssh/vagrant_vm_key.pub"
 
   # Configuración inicial del servidor SSH
   config.vm.provision "shell", run: "once" do |s|
@@ -83,6 +83,8 @@ Vagrant.configure("2") do |config|
 
       # Reiniciar el servidor SSH
       systemctl restart sshd
+
+      loadkeys es
     SHELL
   end
 

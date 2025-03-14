@@ -16,6 +16,8 @@ El objetivo es automatizar el proceso de configuración para que la máquina vir
 1. Abre **PowerShell** y ejecuta:
    ```powershell
    ssh-keygen -t rsa -b 2048 -C "vagrant_vm_key" -f $HOME\.ssh\vagrant_vm_key
+   
+   ssh-keygen -t rsa -b 2048 -C "vagrant_vm_key" -f "$env:USERPROFILE\.ssh\vagrant_vm_key"
    ```
    - **`-t rsa`**: Especifica el tipo de clave RSA.
    - **`-b 2048`**: Define el tamaño de la clave.

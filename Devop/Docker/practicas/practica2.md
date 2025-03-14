@@ -1,12 +1,8 @@
 ## Objetivos de la práctica
 
-1. **Entender Como se Crea DockerFile**
-2. **Ocultar la información sensible del código fuente**
+1. **La arquitectura de Docker**
 
-## Descripción
-Basándonos en lo que hemos hecho en la práctica 1, ahora vamos a crearnos un dockerfile pero vamos a ocultar la información sensible como el pass o el usario para que no es´te guardado en ningún fichero fuente.
+## Descripción.
 
-Al nosotros eliminar el usuario y el passord metiéndolo en una variable de entorno ganamos:
-
-- No podemos equivocarnos al desplegar en test o producción
-- No podemos subir esa información al repositorio ( Fallo de seguridad )
+- Crear un mapa mental que me explique de una forma sencilla y visual la arquitectura de docker.
+- Vamos a usar Xmind para realizar el mapa.

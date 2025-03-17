@@ -47,7 +47,7 @@ Aprender a crear y gestionar volúmenes lógicos (LVM), y realizar snapshots par
      /dev/vg_datos/lv_almacen   /mnt/almacen   ext4   defaults   0 2
      ```
 
-5. **Ampliar el LV (opcional)**  
+5. **Ampliar el LV**  
    - Supongamos que necesitamos 10 GB más. Ejecutar:
      ```bash
      sudo lvextend -L +10G /dev/vg_datos/lv_almacen

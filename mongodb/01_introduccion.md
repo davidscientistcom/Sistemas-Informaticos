@@ -22,7 +22,7 @@ NoSQL significa "Not Only SQL" y se refiere a bases de datos no relacionales que
 ### 1.2 Diferencias entre SQL y NoSQL
 
 | Característica              | Relacional (SQL)                  | NoSQL                              |
-|------------------------------|-----------------------------------|-------------------------------------|
+||--|-|
 | Estructura de datos          | Tablas (filas y columnas)         | Documentos, clave-valor, grafos     |
 | Esquema                      | Fijo y predefinido                | Flexible o sin esquema              |
 | Escalabilidad                | Vertical                          | Horizontal                          |
@@ -47,7 +47,7 @@ MongoDB es una base de datos orientada a documentos (JSON extendido: BSON). Los 
 - Compatible con estructuras de datos en lenguajes populares.
 - Ideal para cloud y entornos distribuidos.
 
----
+
 
 ## 2. Instalación de MongoDB con Docker
 
@@ -93,7 +93,7 @@ docker exec -it mongodb mongosh
 db.runCommand({ hello: 1 })
 ```
 
----
+
 
 ## 3. Generación de Datos Realistas con Python Faker
 
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         json.dump(contratos, f, indent=4, ensure_ascii=False)
 ```
 
----
+
 
 ## 4. Operaciones CRUD con PyMongo
 
@@ -214,7 +214,7 @@ contracts.delete_one({ 'id_contrato': 12345678 })
 contracts.delete_many({ 'consumo': 0 })
 ```
 
----
+
 
 ## 5. Uso de MongoDB Compass
 
@@ -239,7 +239,7 @@ GUI oficial de MongoDB para explorar y gestionar bases de datos visualmente. Per
 - Usar el constructor visual de queries
 - Editar o eliminar registros
 
----
+
 
 ## 6. Conclusión
 

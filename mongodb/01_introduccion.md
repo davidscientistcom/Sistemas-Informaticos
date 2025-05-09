@@ -22,7 +22,7 @@ NoSQL significa "Not Only SQL" y se refiere a bases de datos no relacionales que
 ### 1.2 Diferencias entre SQL y NoSQL
 
 | Característica              | Relacional (SQL)                  | NoSQL                              |
-||--|-|
+|--|--|--|
 | Estructura de datos          | Tablas (filas y columnas)         | Documentos, clave-valor, grafos     |
 | Esquema                      | Fijo y predefinido                | Flexible o sin esquema              |
 | Escalabilidad                | Vertical                          | Horizontal                          |
@@ -259,4 +259,8 @@ Es ideal para proyectos que requieren agilidad, escalabilidad y estructuras de d
 - Seguridad y despliegue en producción
 
 Consulta siempre la [documentación oficial de MongoDB](https://www.mongodb.com/docs/) para estar al día con las mejores prácticas.
+
+
+## 7. Enlace para descargar compass:
+https://www.mongodb.com/try/download/compass 
 
